@@ -20,10 +20,20 @@ const getUsersID = (req, res, next) => {
     });
 }
 
-
+const createUser = (req, res, next) => {
+    const { user_id, first_name, last_name, email ,user_password } = req.body;
+  
+    db.query('INSERT INTO users (user_id, first_name, last_name, email ,user_password ) VALUES ($1, $2, $3, $4, $5)', [user_id, first_name, last_name, email ,user_password], (err, result) => {
+      if (err) {
+        return next(err);
+      }
+      res.send(result.rows)
+    });
+  }
 
 
 module.exports = {
     getUsers,
-    getUsersID
+    getUsersID,
+    createUser
 };

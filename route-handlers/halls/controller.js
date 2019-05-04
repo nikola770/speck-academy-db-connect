@@ -1,5 +1,5 @@
 const db = require('../../db/connect');
-
+//////////////////////////////////////////////////////////
 const getHalls = (req, res, next) => {
     db.query('SELECT * from halls', (err, result) => {
         if (err) {
@@ -8,7 +8,7 @@ const getHalls = (req, res, next) => {
         res.send(result.rows)
     });
 }
-
+////////////////////////////////////////////////////////
 const getHallByid = (req, res, next) => {
     //console.log("bla,", req.params);
     const hallId = req.params.hallId;
@@ -19,37 +19,51 @@ const getHallByid = (req, res, next) => {
         res.send(result.rows)
     });
 }
-
-const postHall = (req, res, next) => {
-    
-    db.query("INSERT INTO halls(hall_id, hall_name, hall_adress, size) VALUES (b549a50da7dd43ef8ab96fb6ef360666, 'Sportska dvorana', 'Potočka ulica 17', 400)", (err, result) => {
-        if (err) {
-            return next(err);
-        }
-        res.send(result.rows) 
-    });
-}
-
+///////////////////////////////////////////////////////
 const createHall = (req, res, next) => {
-    const { hall_id, hall_name, hall_adress, size } = request.body
+        const { hall_id, hall_name, hall_adress, size } = req.body;
   
-    db.post('INSERT INTO halls (hall_id, hall_name, hall_adress, size) VALUES ($1, $2, $3, $4)', [hall_id, hall_name, hall_adress, size], (err, result) => {
+    db.query('INSERT INTO halls (hall_id, hall_name, hall_adress, size) VALUES ($1, $2, $3, $4)', 
+    [hall_id, hall_name, hall_adress, size], (err, result) => {
       if (err) {
         return next(err);
       }
-      res.status(201).send(`Hall added with name: ${result.hall_name}`)
+      res.status(201).send(result.rows)
     })
   }
-
+///////////////////////////////////////////////////////////////////////
+const updateHall = (req, res, next) => {
+    const idHall = req.params.idHall;
+    const { hall_name, hall_adress, size } = req.body
+  
+    db.query(
+      'UPDATE halls SET hall_name = $1, hall_adress = $2, size = $3 WHERE hall_id = $4',
+      [hall_name, hall_adress, size, idHall],
+      (err, results) => {
+        if (err) {
+          throw err;
+        }
+        res.status(200).send(results.rows)
+      });
+  }
+///////////////////////////////////////////////////////////////////////////////
+  const deleteHall = (req, res, next) => {
+    console.log("bla,", req.params);
+    const idHall2 = req.params.idHall2;
+  
+    db.query('DELETE FROM halls WHERE hall_id = $1', [idHall2], (err, results) => {
+      if (err) {
+        throw err;
+      }
+      res.status(200).send(results.rows)
+    });
+  }
 
 
 module.exports = {
     getHalls,
     getHallByid,
-    postHall,
-    createHall
+    createHall,
+    updateHall,
+    deleteHall
 };
-
-/*module.exports = {
-    getIDHalls
-};*/
