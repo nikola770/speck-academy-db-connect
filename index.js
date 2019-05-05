@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const {
   hallsHandler,
   usersHandler,
+  reservationsHandler
 } = require('./route-handlers');
 
 
@@ -20,6 +21,7 @@ app.use(
 // TODO: Base routes
 router.use('/halls', hallsHandler),
 router.use('/users', usersHandler),
+router.use('/reservations', reservationsHandler),
 // Test route
 router.get('/', (req, res) => {
   res.send('ok');
